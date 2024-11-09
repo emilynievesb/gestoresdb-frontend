@@ -1,20 +1,16 @@
+// app/auth/TabSelector.jsx
 import React from 'react';
+import { Button } from '@/components/ui/button';
 
 const TabSelector = ({ isLogin, setIsLogin }) => {
     return (
         <div className="flex gap-4 mb-4">
-            <button
-                className={`flex-1 py-2 font-semibold ${isLogin ? 'bg-gray-100 text-black' : 'bg-gray-200 text-gray-500'} rounded-lg`}
-                onClick={() => setIsLogin(true)}
-            >
+            <Button variant={isLogin ? 'default' : 'ghost'} className="flex-1" onClick={() => setIsLogin(true)}>
                 Ingreso
-            </button>
-            <button
-                className={`flex-1 py-2 font-semibold ${!isLogin ? 'bg-gray-100 text-black' : 'bg-gray-200 text-gray-500'} rounded-lg`}
-                onClick={() => setIsLogin(false)}
-            >
+            </Button>
+            <Button variant={!isLogin ? 'default' : 'ghost'} className="flex-1" onClick={() => setIsLogin(false)}>
                 Registro
-            </button>
+            </Button>
         </div>
     );
 };

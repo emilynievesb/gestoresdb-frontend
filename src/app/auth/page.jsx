@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TabSelector from './TabSelector';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
@@ -9,12 +10,16 @@ const AuthForm = () => {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow-md text-center">
-                <h2 className="text-2xl font-semibold">Acceso a la cuenta</h2>
-                <p className="text-gray-500 mb-4">Ingresa o regístrate para continuar.</p>
-                <TabSelector isLogin={isLogin} setIsLogin={setIsLogin} />
-                {isLogin ? <LoginForm /> : <RegisterForm />}
-            </div>
+            <Card className="w-full max-w-md">
+                <CardHeader>
+                    <CardTitle className="text-2xl">Acceso a la cuenta</CardTitle>
+                    <p className="text-gray-500">Ingresa o regístrate para continuar.</p>
+                </CardHeader>
+                <CardContent>
+                    <TabSelector isLogin={isLogin} setIsLogin={setIsLogin} />
+                    {isLogin ? <LoginForm /> : <RegisterForm />}
+                </CardContent>
+            </Card>
         </div>
     );
 };
