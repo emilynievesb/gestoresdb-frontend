@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import BoardCard from './BoardCard';
 import NewBoardCard from './NewBoardCard';
 import NewBoardModal from './NewBoardModal';
+import EditBoardModal from './[id]/EditBoardModal';
 
 const BoardList = () => {
+    // !! Recuerda que estos datos deben ser cambiados por los que se trae la petición a la base de datos
     const [boards, setBoards] = useState([
         {
             id: 1,
@@ -32,17 +34,50 @@ const BoardList = () => {
         },
     ]);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isNewBoardModalOpen, setIsNewBoardModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedBoard, setSelectedBoard] = useState(null);
 
-    const handleOpenModal = () => setIsModalOpen(true);
-    const handleCloseModal = () => setIsModalOpen(false);
-
-    const handleCreateBoard = (newBoard) => {
-        const createdAt = new Date().toISOString();
-        const updatedAt = createdAt;
-        setBoards([...boards, { ...newBoard, id: boards.length + 1, createdAt, updatedAt, isActive: true }]);
+    // Abrir el modal para crear un nuevo tablero
+    const handleOpenNewBoardModal = () => {
+        setIsNewBoardModalOpen(true);
     };
 
+    const handleCloseNewBoardModal = () => {
+        setIsNewBoardModalOpen(false);
+    };
+
+    // Abrir el modal para editar un tablero existente
+    const handleOpenEditModal = (board) => {
+        setSelectedBoard(board);
+        setIsEditModalOpen(true);
+    };
+
+    const handleCloseEditModal = () => {
+        setIsEditModalOpen(false);
+        setSelectedBoard(null);
+    };
+
+    // Guardar los cambios al editar un tablero
+    const handleSaveChanges = (updatedData) => {
+        setBoards(boards.map((board) => (board.id === selectedBoard.id ? { ...board, ...updatedData, updatedAt: new Date().toISOString() } : board)));
+        handleCloseEditModal();
+    };
+
+    // Crear un nuevo tablero
+    const handleCreateBoard = (newBoardData) => {
+        const newBoard = {
+            ...newBoardData,
+            id: boards.length + 1, //!! Genera un ID único (en un entorno real usarías un ID generado por el servidor, es decir que no es necesario que envies esto a la base de datos porque mongo ya te lo proporciona)
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isActive: true,
+        };
+        setBoards([...boards, newBoard]);
+        handleCloseNewBoardModal();
+    };
+
+    // Alternar el estado activo/inactivo de un tablero
     const toggleBoardStatus = (id) => {
         setBoards(boards.map((board) => (board.id === id ? { ...board, isActive: !board.isActive } : board)));
     };
@@ -60,11 +95,17 @@ const BoardList = () => {
                         description={board.description}
                         isActive={board.isActive}
                         onToggle={() => toggleBoardStatus(board.id)}
+                        onEdit={() => handleOpenEditModal(board)}
                     />
                 ))}
-                <NewBoardCard onClick={handleOpenModal} />
+                <NewBoardCard onClick={handleOpenNewBoardModal} />
             </div>
-            <NewBoardModal isOpen={isModalOpen} onClose={handleCloseModal} onCreate={handleCreateBoard} />
+
+            {/* Modal para crear un nuevo tablero */}
+            <NewBoardModal isOpen={isNewBoardModalOpen} onClose={handleCloseNewBoardModal} onCreate={handleCreateBoard} />
+
+            {/* Modal para editar un tablero existente */}
+            <EditBoardModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} onSave={handleSaveChanges} board={selectedBoard} />
         </div>
     );
 };
