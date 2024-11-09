@@ -4,7 +4,6 @@ import React from 'react';
 const ToggleSwitch = ({ isActive, onToggle }) => {
     return (
         <div className="flex items-center justify-between">
-            <span>{isActive ? 'Activo' : 'Inactivo'}</span>
             <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" checked={isActive} onChange={onToggle} className="sr-only" />
                 <div className={`w-10 h-6 rounded-full ${isActive ? 'bg-green-500' : 'bg-gray-300'}`} />
