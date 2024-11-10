@@ -89,6 +89,7 @@ const BoardList = () => {
                 {boards.map((board) => (
                     <BoardCard
                         key={board.id}
+                        id={board.id}
                         title={board.title}
                         createdAt={board.createdAt}
                         updatedAt={board.updatedAt}
