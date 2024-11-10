@@ -2,10 +2,18 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 const RegisterForm = () => {
+    const router = useRouter();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        router.push('/dashboard'); // Redirige a /dashboard
+    };
+
     return (
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
             <div>
                 <Label>Nombre</Label>
                 <Input type="text" placeholder="Tu nombre" required />
